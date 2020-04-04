@@ -1,0 +1,112 @@
+service: simple-api
+
+plugins:
+  - serverless-python-requirements
+  - serverless-plugin-warmup
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: ${opt:stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      Resource: arn:aws:dynamodb:*:*:table/${self:provider.stage}*
+  environment:
+    STAGE: ${self:provider.stage}
+  logs:
+    httpApi: true
+    restApi: true
+
+package:
+  exclude:
+    - .git/**
+    - .cache/**
+    - venv/**
+    - node_modules/**
+    - build/**
+    - dist/**
+    - sutaxi_serverless.egg-info/**
+    - .cloudformation/**
+    - .eggs/**
+
+functions:
+  ping:
+    name: ${self:provider.stage}-ping
+    handler: ping.hello
+    events:
+      - http:
+          path: ping
+          method: get
+
+  createUser:
+    name: ${self:provider.stage}-create-user
+    handler: applications/users/lambda_functions/create_user.handler
+    events:
+      - http:
+          path: users
+          method: post
+
+  getUser:
+    name: ${self:provider.stage}-get-user
+    handler: applications/users/lambda_functions/get_user.handler
+    events:
+      - http:
+          path: users/{user_id}
+          method: get
+
+  createComment:
+    name: ${self:provider.stage}-create-comment
+    handler: applications/comments/lamda_functions/create_comment.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /comments
+
+
+resources:
+  Resources:
+    ExecutionRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        RoleName: ${self:service}-${self:provider.stage}-execution-role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+        Policies:
+          - PolicyName: execution-access
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - dynamodb:BatchGetItem
+                    - dynamodb:BatchWriteItem
+                    - dynamodb:DeleteItem
+                    - dynamodb:DescribeStream
+                    - dynamodb:DescribeTable
+                    - dynamodb:GetItem
+                    - dynamodb:GetRecords
+                    - dynamodb:GetShardIterator
+                    - dynamodb:ListStreams
+                    - dynamodb:PutItem
+                    - dynamodb:Query
+                    - dynamodb:Scan
+                    - dynamodb:UpdateItem
+                  Resource: arn:aws:dynamodb:*:*:table/${self:provider.stage}*

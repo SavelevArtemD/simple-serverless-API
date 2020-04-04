@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: specification
+  version: '1.0'
+  description: API refference for serverless-simple-API
+  contact:
+    name: Artem
+    email: savelevart34@gmail.com
+servers:
+  - url: 'https://<your_api_id>.execute-api.<you_region>.amazonaws.com/comments'
+paths:
+  /users:
+    post:
+      summary: Create user
+      operationId: post-users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                required:
+                  - user_id
+      description: Create user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                eamil:
+                  type: string
+              required:
+                - username
+                - eamil
+      tags:
+        - users
+  '/users/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+    get:
+      summary: Get user
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  date_joined:
+                    type: string
+                  username:
+                    type: string
+                required:
+                  - id
+                  - email
+                  - date_joined
+                  - username
+      operationId: get-users-user_id
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user_id
+          required: true
+      description: get user by id
+  /comments:
+    post:
+      summary: Create comment
+      operationId: post-comments
+      responses:
+        '204':
+          description: No Content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                body:
+                  type: string
+              required:
+                - user_id
+                - body
+      description: Create comment
+      tags:
+        - comments
+components:
+  schemas: {}
+tags:
+  - name: users
+  - name: comments
+
