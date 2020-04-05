@@ -65,7 +65,7 @@ paths:
                   email:
                     type: string
                   date_joined:
-                    type: string
+                    type: number
                   username:
                     type: string
                 required:

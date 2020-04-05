@@ -11,5 +11,5 @@ class CommentModel(BaseModel):
         table_name = BaseModel.format_table_name("comments")
 
     user_id = UnicodeAttribute(hash_key=True, default_for_new=lambda: str(uuid.uuid4()))
-    created_datetime = NumberAttribute(range_key=True, default_for_new=lambda: str(datetime.utcnow().timestamp()))
+    created_datetime = NumberAttribute(range_key=True, default_for_new=lambda: datetime.utcnow().timestamp())
     body = UnicodeAttribute(null=False)

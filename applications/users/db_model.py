@@ -13,4 +13,4 @@ class UserModel(BaseModel):
     id = UnicodeAttribute(hash_key=True, default_for_new=lambda: str(uuid.uuid4()))
     username = UnicodeAttribute(null=False)
     email = UnicodeAttribute(null=False)
-    date_joined = NumberAttribute(default_for_new=lambda: str(datetime.utcnow().timestamp()))
+    date_joined = NumberAttribute(default_for_new=lambda: datetime.utcnow().timestamp())
