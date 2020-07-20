@@ -1,4 +1,4 @@
-# Пример простого full-serverless API
+# Пример простого serverless API
 
 ## Что используется:
 - AWS Services: Lambda, DynamoDB, API-Gateway (REST API, HTTP API)
@@ -6,7 +6,7 @@
 - Terraform (для описания таблиц DynamoDB)   
 
 ## Зачем:
-Простой пример реализации full-serverless API с использованием сервисов AWS. Может быть использован для
+Простой пример реализации serverless API с использованием сервисов AWS. Может быть использован для
 - обучения.
 - знакомства с сервисами AWS.
 - тестового стенда или основы нового проекта.
@@ -35,7 +35,7 @@ DynamoDB используется в качестве БД, соответств
 - [Установить aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 - [Установить Serverless Framework](https://serverless.com/framework/docs/getting-started/)
 - [Настроить Serverless Framework](https://serverless.com/framework/docs/providers/aws/cli-reference/config-credentials/)
-- [Установить Terrraform: https](//www.terraform.io/downloads.html)
+- [Установить Terrraform](https://www.terraform.io/downloads.html)
 
 ## Как этим всем пользоваться:
 #### - Установка зависимостей
@@ -76,8 +76,8 @@ DynamoDB используется в качестве БД, соответств
 Долгожданный запуск: `terraform apply`
 
 #### - Деплоим основной стэк:
-Переходим в корень проекта и запускаем команду: `./deploy.sh <your_stage> <aws_profile>`
-`aws_profile` указывался при конфигурации aws-cli, если что можно посмотреть в файле `.aws/creds`
+Переходим в корень проекта и запускаем команду: `./deploy.sh <your_stage> <aws_profile>`    
+`aws_profile` указывался при конфигурации aws-cli, если что можно посмотреть в файле `.aws/creds`   
 `your_stage` **должен совпадать с именем terraform workspace**
 
 #### - Пора посмотреть что получилось:

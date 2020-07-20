@@ -1,0 +1,25 @@
+{
+  "name": "simple-serverless-api",
+  "version": "1.0.0",
+  "description": "## Что используется: - AWS Services: Lambda, DynamoDB, API-Gateway (REST API, HTTP API) - Serverless framework - Terraform (для описания таблиц DynamoDB)",
+  "main": "index.js",
+  "dependencies": {
+    "serverless": "^1.75.1",
+    "serverless-plugin-warmup": "^4.9.0",
+    "serverless-python-requirements": "^5.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SavelevArtemD/simple-serverless-API.git"
+  },
+  "author": "Savelev Artem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SavelevArtemD/simple-serverless-API/issues"
+  },
+  "homepage": "https://github.com/SavelevArtemD/simple-serverless-API#readme"
+}
