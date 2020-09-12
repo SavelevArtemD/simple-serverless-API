@@ -24,6 +24,8 @@ provider:
   logs:
     httpApi: true
     restApi: true
+  httpApi:
+    payload: "1.0"
 
 package:
   exclude:
@@ -73,6 +75,40 @@ functions:
 
 resources:
   Resources:
+
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.stage}-users
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    commentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.stage}-comments
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: created_datetime
+            AttributeType: 'N'
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: created_datetime
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+
     ExecutionRole:
       Type: AWS::IAM::Role
       Properties:
