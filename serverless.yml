@@ -124,7 +124,6 @@ resources:
               Action: sts:AssumeRole
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole
-          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
         Policies:
           - PolicyName: execution-access
             PolicyDocument:

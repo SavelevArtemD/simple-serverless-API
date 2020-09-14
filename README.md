@@ -11,6 +11,14 @@
 - знакомства с сервисами AWS.
 - тестового стенда или основы нового проекта.
 
+## Дисклэймер 
+Так как это **демонстрационный** проект, многие вещи упрощены:  
+- Настройка ролей
+- Не стоит описывать структуру БД в serverless, 
+рассмотрите для этого другие инфраструктурные фрэймворки
+- В реальном проекте, сразу разделяйте ваши ресурсы на несколько темплэйтов и стэки
+- Для Read and Write capacity установлены минимальные значения ([что это](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html))
+в реальных проектах просчитывайте их или ставьте в on-demand(но тогда готовьте кошелек)
 
 ## Описание проекта:
 API включает следующие простые функции:
@@ -21,32 +29,49 @@ API включает следующие простые функции:
 Структура проекта:
 - `applications` - папка с основной логикой, разделенной по доменам.
 - `services` - папка для сервисов или утилит.
-- `terraform` - папка с темплэйтами terraform.
 - файл `serverless` - файл, содержащий описание инфраструктуры проекта.
 
 В проекте продемонстрировано использование как  API Gateway REST API (создание и получение пользователя) 
 так и  API Gateway HTTP API(создание комментария). Обе технологии используется в связке с Lambda functions. 
 DynamoDB используется в качестве БД, соответственно.
 
-## Необходимо:
-Достаточно сделать один раз (~15 минут), потом можно штамповать облачные проекты хоть каждый день)
-- [Создать аккаунт AWS](https://portal.aws.amazon.com/billing/signup?redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start)
-- По best-practices рутовый акк рекомендуется удалять и создавать админский ([как это сделать](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html))
-- [Установить aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
-- [Установить Serverless Framework](https://serverless.com/framework/docs/getting-started/)
-- [Настроить Serverless Framework](https://serverless.com/framework/docs/providers/aws/cli-reference/config-credentials/)
+## Для работы необходимо:   
+- [Создать аккаунт AWS](https://portal.aws.amazon.com/billing/signup?redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start).
+**Обязательно сохраните креды в надежном месте, скачать их будет предложено один раз**
+- По best-practices рутовый акк не рекомендуется использовать, вместо этого необходимо
+ создавать админский ([как это сделать](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html)).
+ **Обязательно сохраните креды в надежном месте, скачать их будет предложено один раз**
 
-## Как этим всем пользоваться:
-#### - Установка зависимостей
+## Варианты деплоя:
+ - [Установка всех необходимых зависимостей локально и ручной деплой](#hands)
+ - [Деплой при помощи контэйнера (конфиг есть в проекте)](#image)
+
+### Ручная установка и деплой: <a name="hands"></a>
+Достаточно сделать один раз, потом можно штамповать облачные проекты хоть каждый день)
+- [Установить aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
+
+##### - Установка зависимостей
 1. После того как настроили интерпритатор для проекта, устанавливаем зависимости.   
 2. Не забываем про `npm i` нужен для установки serverless framework.
+3. После установки нужно [настроить Serverless Framework](https://serverless.com/framework/docs/providers/aws/cli-reference/config-credentials/)
 
-#### - Деплоим основной стэк:
+
+##### - Деплоим основной стэк:
 Переходим в корень проекта и запускаем команду: `./deploy.sh <your_stage> <aws_profile>`    
 `aws_profile` указывался при конфигурации aws-cli, если что можно посмотреть в файле `.aws/creds`   
 `your_stage` наименование окружения(dev, stage, prod)
 
-#### - Пора посмотреть что получилось:
+### Деплой при помощи контэйнера: <a name="image"></a>   
+##### - Создание окружения для контэйнера:  
+ - Создаем .env файл `cp envTemplate .env`
+ - Прописываем соответствующие ключи (пробелов быть не должно):
+    - ENV - обозначение стэйджа
+    - REGION - можно посмотреть в правом верхнем углу консоли и переключиться при желании
+ - Билдим: `docker build -t deploy_image .` (аккуратно, в контэйнере нода и не говорите, что не предупреждал)
+ - Запускаем контейнер `docker run --env-file .env -d deploy_image:latest`
+
+
+#### Пора посмотреть что получилось:
 При деплое serverless framework показал какие lambda функции у нас есть и эндпоинты на которые можно покидать запрос.   
 
 Для примера создадим нового пользователя:
